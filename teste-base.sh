@@ -50,6 +50,18 @@ rm record.wav
 
 stop_if_no "Você ouviu sua gravação?"
 
+echo "Testando LEDs programáveis"
+sudo chmod 777 /sys/class/leds/led1/trigger
+sudo chmod 777 /sys/class/leds/led2/trigger
+echo heartbeat | sudo tee /sys/class/leds/led1/trigger
+echo default-on | sudo tee /sys/class/leds/led2/trigger
+
+stop_if_no "O LED verde está piscando e o azul aceso?"
+
+echo default-on | sudo tee /sys/class/leds/led1/trigger
+echo heartbeat | sudo tee /sys/class/leds/led2/trigger
+
+
 echo "Testando bluetooth, certifique-se que existe um dispositivo bluetooth próximo à placa e pressione enter"
 read -r
 bt_devices=$(sudo hcitool scan | tail -n +2)
@@ -101,16 +113,5 @@ if ! ping -c 5 8.8.8.8 > /dev/null; then
     echo "Erro no Ethernet"
     exit 1
 fi
-
-echo "Testando LEDs programáveis"
-sudo chmod 777 /sys/class/leds/led1/trigger
-sudo chmod 777 /sys/class/leds/led2/trigger
-echo heartbeat | sudo tee /sys/class/leds/led1/trigger
-echo default-on | sudo tee /sys/class/leds/led2/trigger
-
-stop_if_no "O LED verde está piscando e o azul aceso?"
-
-echo default-on | sudo tee /sys/class/leds/led1/trigger
-echo heartbeat | sudo tee /sys/class/leds/led2/trigger
 
 echo "Todos os testes foram concluídos com sucesso."
