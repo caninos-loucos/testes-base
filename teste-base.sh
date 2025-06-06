@@ -12,7 +12,7 @@ function stop_if_no() {
 
 echo "Testando HDMI"
 xrandr -s 640x480
-sleep 2
+sleep 5
 xrandr -s 1920x1080
 stop_if_no "A resolução mudou?"
 
@@ -83,20 +83,20 @@ fi
 
 if ! ping -c 5 8.8.8.8 > /dev/null; then
     echo "Erro no Wi-Fi"
-    sudo nmcli con down id "$ssid"
     exit 1
 fi
-sudo nmcli con down id "$ssid"
+
 
 if ! ping -c 5 8.8.8.8 > /dev/null; then
     echo "Erro no Wi-Fi"
     sudo nmcli con down id "Citi 6"
     exit 1
 fi
-sudo nmcli con down id "Citi 6"
+sudo nmcli con down id "$ssid"
 
 echo "Conecte um cabo de rede e pressione enter"
 read -r
+sleep 3
 if ! ping -c 5 8.8.8.8 > /dev/null; then
     echo "Erro no Ethernet"
     exit 1
