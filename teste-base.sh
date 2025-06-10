@@ -42,8 +42,21 @@ if should_run 2; then
     stop_if_no "Ambos áudios funcionaram?"
 fi
 
-# 3 - Teste de cartão SD
+# 3 - Teste de microfone
 if should_run 3; then
+    echo "Testando microfone, pressione enter e faça algum barulho"
+    read -r
+    arecord -d 5 record.wav > /dev/null 2>&1
+
+    echo "Reproduzindo áudio do microfone"
+    aplay record.wav > /dev/null 2>&1
+    rm record.wav
+
+    stop_if_no "Você ouviu sua gravação?"
+fi
+
+# 4 - Teste de cartão SD
+if should_run 4; then
     echo "Salvando estado do armazenamento"
     lsblk > /tmp/lsblk_before.txt
 
@@ -57,18 +70,7 @@ if should_run 3; then
     fi
 fi
 
-# 4 - Teste de microfone
-if should_run 4; then
-    echo "Testando microfone, pressione enter e faça algum barulho"
-    read -r
-    arecord -d 5 record.wav > /dev/null 2>&1
 
-    echo "Reproduzindo áudio do microfone"
-    aplay record.wav > /dev/null 2>&1
-    rm record.wav
-
-    stop_if_no "Você ouviu sua gravação?"
-fi
 
 # 5 - Teste de LEDs
 if should_run 5; then
